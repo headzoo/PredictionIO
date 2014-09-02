@@ -77,12 +77,15 @@ class PredictionIO
      * @param $userId
      * @param $itemId
      * @param string $action
+     * @param array $args
      * @return mixed
      */
-    public function recordAction($userId, $itemId, $action = 'view')
+    public function recordAction($userId, $itemId, $action = 'view', $args = [])
     {
+        $args['pio_action'] = $action;
+        $args['pio_iid']    = $itemId;
         $this->client->identify($userId);
-        $response = $this->client->execute($this->client->getCommand('record_action_on_item', array('pio_action' => $action, 'pio_iid' => $itemId)));
+        $response = $this->client->execute($this->client->getCommand('record_action_on_item', $args));
 
         return $response;
     }
