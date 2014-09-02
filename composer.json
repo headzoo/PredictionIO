@@ -1,5 +1,5 @@
 {
-    "name": "endroid/prediction-io",
+    "name": "headzoo/prediction-io",
     "description": "Endroid PredictionIO Client",
     "keywords": ["endroid", "prediction", "io", "predictionio"],
     "homepage": "https://github.com/endroid/PredictionIO",
