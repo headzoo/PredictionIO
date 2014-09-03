@@ -60,10 +60,10 @@ class PredictionIO
      * Create an item.
      *
      * @param $itemId
-     * @param int $itemTypes
+     * @param array $itemTypes
      * @return mixed
      */
-    public function createItem($itemId, $itemTypes = 1)
+    public function createItem($itemId, $itemTypes = [])
     {
         $command = $this->client->getCommand('create_item', array('pio_iid' => $itemId, 'pio_itypes' => $itemTypes));
         $response = $this->client->execute($command);
@@ -95,13 +95,16 @@ class PredictionIO
      *
      * @param $userId
      * @param $engine
+     * @param array $args
      * @param int $count
      * @return mixed
      */
-    public function getRecommendations($userId, $engine, $count = 3)
+    public function getRecommendations($userId, $engine, $args = [], $count = 3)
     {
+        $args["pio_engine"] = $engine;
+        $args["pio_n"]      = $count;
         $this->client->identify($userId);
-        $command = $this->client->getCommand('itemrec_get_top_n', array('pio_engine' => $engine, 'pio_n' => $count));
+        $command = $this->client->getCommand('itemrec_get_top_n', $args);
         $response = $this->client->execute($command);
 
         return $response['pio_iids'];
@@ -112,12 +115,16 @@ class PredictionIO
      *
      * @param $itemId
      * @param $engine
+     * @param array $args
      * @param int $count
      * @return mixed
      */
-    public function getSimilarItems($itemId, $engine, $count = 3)
+    public function getSimilarItems($itemId, $engine, $args = [], $count = 3)
     {
-        $command = $this->client->getCommand('itemsim_get_top_n', array('pio_iid' => $itemId, 'pio_engine' => $engine, 'pio_n' => $count));
+        $args["pio_iid"]    = $itemId;
+        $args["pio_engine"] = $engine;
+        $args["pio_n"]      = $count;
+        $command = $this->client->getCommand('itemsim_get_top_n', $args);
         $response = $this->client->execute($command);
 
         return $response['pio_iids'];
